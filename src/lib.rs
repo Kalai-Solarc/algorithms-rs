@@ -1,3 +1,6 @@
+use std::rc::Rc;
+use std::cell::RefCell;
+
 ///
 /// (1) LETTER COMBINATIONS
 ///
@@ -9,12 +12,12 @@
 /// Examples:
 /// ```
 /// use dfs::letter_combinations;
+///
 /// assert_eq!(Vec::<String>::new(), letter_combinations(""));
 /// assert_eq!(vec!["a", "b", "c"], letter_combinations("2"));
 /// assert_eq!(vec!["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"], letter_combinations("23"));
 /// ```
 ///
-
 pub fn letter_combinations(digits: &str) -> Vec<String> {
     let mut results = vec![];
 
@@ -45,4 +48,81 @@ pub fn letter_combinations(digits: &str) -> Vec<String> {
     dfs(digits.as_ref(), "".to_string(), 0, &pad, results.as_mut());
 
     results
+}
+
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct TreeNode {
+  pub val: i32,
+  pub left: Node,
+  pub right: Node,
+}
+
+type Node = Option<Rc<RefCell<TreeNode>>>;
+
+impl TreeNode {
+  #[inline]
+  pub fn new(val: i32) -> Self {
+    TreeNode {
+      val,
+      left: None,
+      right: None
+    }
+  }
+}
+
+///
+/// (2) BALANCED BINARY TREE
+/// Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+///
+/// A valid BST is defined as follows:
+///
+/// The left subtree of a node contains only nodes with keys less than the node's key.
+/// The right subtree of a node contains only nodes with keys greater than the node's key.
+/// Both the left and right subtrees must also be binary search trees.
+/// ```
+/// use std::rc::Rc;
+/// use std::cell::RefCell;
+/// use dfs::{TreeNode, is_valid_bst};
+///
+/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 1, left: None, right: None })));
+/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
+/// let node2 = Some(Rc::new(RefCell::new(TreeNode{ val: 2, left: node1, right: node3 })));
+///
+/// assert_eq!(true, is_valid_bst(node2));
+///
+/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 1, left: None, right: None })));
+/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
+/// let node6 = Some(Rc::new(RefCell::new(TreeNode{ val: 6, left: None, right: None })));
+/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node3, right: node6 })));
+/// let node5 = Some(Rc::new(RefCell::new(TreeNode{ val: 5, left: node1, right: node4 })));
+///
+/// assert_eq!(false, is_valid_bst(node5));
+/// ```
+///
+pub fn is_valid_bst(root: Node) -> bool {
+    fn dfs(node: Node, lower: Node, upper: Node) -> bool {
+        match node.clone() {
+            Some(n) => {
+                if let Some(lower) = lower.clone() {
+                    if !(lower.borrow().val < n.borrow().val) {
+                        return false
+                    }
+                }
+
+                if let Some(upper) = upper.clone() {
+                    if !(upper.borrow().val > n.borrow().val) {
+                        return false
+                    }
+                }
+
+                dfs(n.borrow().left.clone(), lower, node.clone())
+                    && dfs(n.borrow().right.clone(), node.clone(), upper)
+            }
+
+            None => true
+        }
+    }
+
+    dfs(root.clone(), None, None)
 }
