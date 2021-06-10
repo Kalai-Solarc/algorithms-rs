@@ -1,4 +1,19 @@
-
+///
+/// (1) LETTER COMBINATIONS
+///
+/// Given a string containing digits from 2-9 inclusive, return all possible letter combinations
+/// that the number could represent. Return the answer in any order.
+///
+/// A mapping of digit to letters (just like on the telephone buttons). Note that 1 does not map to any letters.
+///
+/// Examples:
+/// ```
+/// use dfs::letter_combinations;
+/// assert_eq!(Vec::<String>::new(), letter_combinations(""));
+/// assert_eq!(vec!["a", "b", "c"], letter_combinations("2"));
+/// assert_eq!(vec!["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"], letter_combinations("23"));
+/// ```
+///
 
 pub fn letter_combinations(digits: &str) -> Vec<String> {
     let mut results = vec![];
@@ -30,16 +45,4 @@ pub fn letter_combinations(digits: &str) -> Vec<String> {
     dfs(digits.as_ref(), "".to_string(), 0, &pad, results.as_mut());
 
     results
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::letter_combinations;
-
-    #[test]
-    fn test_letter_combinations() {
-        assert_eq!(Vec::<String>::new(), letter_combinations(""));
-        assert_eq!(vec!["a", "b", "c"], letter_combinations("2"));
-        assert_eq!(vec!["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"], letter_combinations("23"));
-    }
 }
