@@ -201,3 +201,89 @@ pub fn max_depth_bst(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         },
     }
 }
+
+/// (5) NUMBER OF ISLANDS
+/// 
+/// ```
+/// use std::ops::DerefMut;
+///
+/// use dfs::{num_islands};
+///
+/// let mut grid = vec![
+///     vec!['1', '1', '1', '1', '0'],
+///     vec!['1', '1', '0', '1', '0'],
+///     vec!['1', '1', '0', '0', '0'],
+///     vec!['0', '0', '0', '0', '0']
+/// ];
+///
+/// let mut grid =
+///     grid
+///         .iter_mut()
+///         .map(|v| v.deref_mut())
+///         .collect::<Vec<&mut [char]>>();
+///
+/// assert_eq!(1, num_islands(grid.deref_mut()));
+/// 
+/// let mut  grid = vec![
+///     vec!['1','1','0','0','0'],
+///     vec!['1','1','0','0','0'],
+///     vec!['0','0','1','0','0'],
+///     vec!['0','0','0','1','1']
+/// ];
+///
+/// let mut grid =
+///     grid
+///         .iter_mut()
+///         .map(|v| v.deref_mut())
+///         .collect::<Vec<&mut [char]>>();
+///
+/// assert_eq!(3, num_islands(grid.deref_mut()));
+/// ```
+/// 
+pub fn num_islands(grid: &mut [&mut [char]]) -> i32 {
+    let mut count = 0;
+
+    for row in 0..grid.len() {
+        for column in 0..grid[row].len() {
+            if grid[row][column] == '1' {
+                count += 1;
+                dfs(row, column, grid);
+            }
+        }
+    }
+
+    fn dfs(row: usize, column: usize, grid: &mut [&mut [char]]) {
+        if grid[row][column] != '1' {
+            return;
+        }
+
+        grid[row][column] = '0';
+
+        if column < grid[row].len() - 1 {
+            dfs(row, column + 1, grid);
+        }
+
+        if column > 0 {
+            dfs(row, column - 1, grid);
+        }
+
+        if row < grid.len() - 1 {
+            dfs(row + 1, column, grid);
+        }
+
+        if row > 0 {
+            dfs(row - 1, column, grid);
+        }
+    }
+
+    count as i32
+}
+
+
+#[cfg(test)]
+mod test {
+
+    #[test]
+    fn it_works() {
+    }
+}
