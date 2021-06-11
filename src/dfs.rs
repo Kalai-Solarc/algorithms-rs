@@ -84,7 +84,7 @@ impl TreeNode {
 /// use algorithms::dfs::{TreeNode, is_valid_bst};
 ///
 /// let node1 = TreeNode::new(1, None, None);
-/// let node3 = TreeNode::new(3, None, None);;
+/// let node3 = TreeNode::new(3, None, None);
 /// let node2 = TreeNode::new(2, node1, node3);
 ///
 /// assert_eq!(true, is_valid_bst(node2));
@@ -289,4 +289,48 @@ pub fn num_islands(grid: &mut [&mut [char]]) -> i32 {
     }
 
     count as i32
+}
+
+/// (6) FLATTEN BINARY TREE
+/// 
+/// ```
+/// use std::rc::Rc;
+/// use std::cell::RefCell;
+/// 
+/// use algorithms::dfs::{flatten_binary_tree, TreeNode};
+/// 
+/// let node3 = TreeNode::new(3, None, None);
+/// let node4 = TreeNode::new(4, None, None);
+/// let node6 = TreeNode::new(6, None, None);
+/// let node2 = TreeNode::new(2, node3, node4);
+/// let node5 = TreeNode::new(5, None, node6);
+/// let mut node1 = TreeNode::new(1, node2, node5);
+///
+/// flatten_binary_tree(&mut node1);
+///
+/// let mut  current = node1.clone();
+/// let mut nodes: Vec<i32> = vec![];
+///
+/// while let Some(n) = current {
+///     nodes.push(n.borrow().val);
+///     current = n.borrow().right.clone();
+/// }
+///
+/// assert_eq!(vec![1, 2, 3, 4, 5, 6], nodes);
+/// ```
+/// 
+pub fn flatten_binary_tree(root: &mut Node) {
+    fn dfs(node: Node, rest: Node) -> Node {
+        match node {
+            None => rest,
+            Some(node) => {
+                let mut node_mut = node.borrow_mut();
+                node_mut.right = dfs(node_mut.right.take(), rest);
+                node_mut.right = dfs(node_mut.left.take(), node_mut.right.take());
+                Some(node.clone())
+            }
+        }
+    }
+
+    dfs(root.clone(), None);
 }
