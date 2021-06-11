@@ -168,3 +168,36 @@ pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
 
     dfs(root.clone(), root.clone())
 }
+
+///
+/// ```
+/// use std::rc::Rc;
+/// use std::cell::RefCell;
+///
+/// use dfs::{max_depth, TreeNode};
+///
+/// let node9 = Some(Rc::new(RefCell::new(TreeNode{ val: 9, left: None, right: None })));
+/// let node15 = Some(Rc::new(RefCell::new(TreeNode{ val: 15, left: None, right: None })));
+/// let node7 = Some(Rc::new(RefCell::new(TreeNode{ val: 7, left: None, right: None })));
+/// let node20 = Some(Rc::new(RefCell::new(TreeNode{ val: 20, left: node15, right: node7 })));
+/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node9, right: node20 })));
+///
+/// assert_eq!(3, max_depth(node3));
+///
+/// let node2 = Some(Rc::new(RefCell::new(TreeNode{ val: 20, left: None, right: None })));
+/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: node2 })));
+///
+/// assert_eq!(2, max_depth(node1));
+///
+/// assert_eq!(0, max_depth(None));
+/// ```
+/// 
+pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+    match root {
+        None => 0,
+        Some(node) => {
+            1 + i32::max(max_depth(node.borrow().left.clone()),
+                         max_depth(node.borrow().right.clone()))
+        },
+    }
+}
