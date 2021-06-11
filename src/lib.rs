@@ -1,7 +1,7 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 
-///
+
 /// (1) LETTER COMBINATIONS
 ///
 /// Given a string containing digits from 2-9 inclusive, return all possible letter combinations
@@ -71,8 +71,9 @@ impl TreeNode {
   }
 }
 
+
+/// (2) VALID BINARY TREE
 ///
-/// (2) BALANCED BINARY TREE
 /// Given the root of a binary tree, determine if it is a valid binary search tree (BST).
 ///
 /// A valid BST is defined as follows:
@@ -126,6 +127,9 @@ pub fn is_valid_bst(root: Node) -> bool {
 
     dfs(root.clone(), None, None)
 }
+/// (3) SYMETRIC TREE
+///
+/// Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
 ///
 /// ```
 /// use dfs::{TreeNode, is_symmetric};
@@ -169,6 +173,11 @@ pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
     dfs(root.clone(), root.clone())
 }
 
+/// (4) MAX DEPTH OF BINARY SEARCH TREE
+///
+/// Given the root of a binary tree, return its maximum depth.
+///
+/// A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
 ///
 /// ```
 /// use std::rc::Rc;
@@ -203,7 +212,12 @@ pub fn max_depth_bst(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
 }
 
 /// (5) NUMBER OF ISLANDS
-/// 
+///
+/// Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+///
+/// An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.
+/// You may assume all four edges of the grid are all surrounded by water.
+///
 /// ```
 /// use std::ops::DerefMut;
 ///
@@ -277,13 +291,4 @@ pub fn num_islands(grid: &mut [&mut [char]]) -> i32 {
     }
 
     count as i32
-}
-
-
-#[cfg(test)]
-mod test {
-
-    #[test]
-    fn it_works() {
-    }
 }
