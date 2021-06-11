@@ -11,7 +11,7 @@ use std::cell::RefCell;
 ///
 /// Examples:
 /// ```
-/// use dfs::letter_combinations;
+/// use algorithms::dfs::letter_combinations;
 ///
 /// assert_eq!(Vec::<String>::new(), letter_combinations(""));
 /// assert_eq!(vec!["a", "b", "c"], letter_combinations("2"));
@@ -62,12 +62,8 @@ type Node = Option<Rc<RefCell<TreeNode>>>;
 
 impl TreeNode {
   #[inline]
-  pub fn new(val: i32) -> Self {
-    TreeNode {
-      val,
-      left: None,
-      right: None
-    }
+  pub fn new(val: i32, left: Node, right: Node) -> Node {
+    Some(Rc::new(RefCell::new(TreeNode { val, left, right })))
   }
 }
 
@@ -84,19 +80,20 @@ impl TreeNode {
 /// ```
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
-/// use dfs::{TreeNode, is_valid_bst};
 ///
-/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 1, left: None, right: None })));
-/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
-/// let node2 = Some(Rc::new(RefCell::new(TreeNode{ val: 2, left: node1, right: node3 })));
+/// use algorithms::dfs::{TreeNode, is_valid_bst};
+///
+/// let node1 = TreeNode::new(1, None, None);
+/// let node3 = TreeNode::new(3, None, None);;
+/// let node2 = TreeNode::new(2, node1, node3);
 ///
 /// assert_eq!(true, is_valid_bst(node2));
 ///
-/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 1, left: None, right: None })));
-/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
-/// let node6 = Some(Rc::new(RefCell::new(TreeNode{ val: 6, left: None, right: None })));
-/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node3, right: node6 })));
-/// let node5 = Some(Rc::new(RefCell::new(TreeNode{ val: 5, left: node1, right: node4 })));
+/// let node1 = TreeNode::new(1, None, None);
+/// let node3 = TreeNode::new(3, None, None);
+/// let node6 = TreeNode::new(6, None, None);
+/// let node4 = TreeNode::new(3, node3, node6);
+/// let node5 = TreeNode::new(5, node1, node4);
 ///
 /// assert_eq!(false, is_valid_bst(node5));
 /// ```
@@ -132,27 +129,28 @@ pub fn is_valid_bst(root: Node) -> bool {
 /// Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
 ///
 /// ```
-/// use dfs::{TreeNode, is_symmetric};
+/// use algorithms:: dfs::{TreeNode, is_symmetric};
+///
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
 ///
-/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
-/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 4, left: None, right: None })));
-/// let node2_l = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node3, right: node4 })));
-/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
-/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 4, left: None, right: None })));
-/// let node2_r = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node3, right: node4 })));
-/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 1, left: node2_l, right: node2_r })));
+/// let node3 = TreeNode::new(3, None, None);
+/// let node4 = TreeNode::new(4, None, None);
+/// let node2_l = TreeNode::new(3, node3, node4);
+/// let node3 = TreeNode::new(3, None, None);
+/// let node4 = TreeNode::new(4, None, None);
+/// let node2_r = TreeNode::new(3, node3, node4);
+/// let node1 = TreeNode::new(1, node2_l, node2_r);
 ///
 /// assert_eq!(false, is_symmetric(node1));
 ///
-/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
-/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 4, left: None, right: None })));
-/// let node2_l = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node3, right: node4 })));
-/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
-/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 4, left: None, right: None })));
-/// let node2_r = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node4, right: node3 })));
-/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 1, left: node2_l, right: node2_r })));
+/// let node3 = TreeNode::new(3, None, None);
+/// let node4 = TreeNode::new(4, None, None);
+/// let node2_l = TreeNode::new(3, node3, node4);
+/// let node3 = TreeNode::new(3, None, None);
+/// let node4 = TreeNode::new(4, None, None);
+/// let node2_r = TreeNode::new(3, node4, node3);
+/// let node1 = TreeNode::new(1, node2_l, node2_r);
 ///
 /// assert_eq!(true, is_symmetric(node1));
 /// ```
@@ -183,18 +181,18 @@ pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
 ///
-/// use dfs::{max_depth_bst, TreeNode};
+/// use algorithms::dfs::{max_depth_bst, TreeNode};
 ///
-/// let node9 = Some(Rc::new(RefCell::new(TreeNode{ val: 9, left: None, right: None })));
-/// let node15 = Some(Rc::new(RefCell::new(TreeNode{ val: 15, left: None, right: None })));
-/// let node7 = Some(Rc::new(RefCell::new(TreeNode{ val: 7, left: None, right: None })));
-/// let node20 = Some(Rc::new(RefCell::new(TreeNode{ val: 20, left: node15, right: node7 })));
-/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node9, right: node20 })));
+/// let node9 = TreeNode::new(9, None, None);
+/// let node15 = TreeNode::new(15, None, None);
+/// let node7 = TreeNode::new(7, None, None);
+/// let node20 = TreeNode::new(20, node15, node7);
+/// let node3 = TreeNode::new(3, node9, node20);
 ///
 /// assert_eq!(3, max_depth_bst(node3));
 ///
-/// let node2 = Some(Rc::new(RefCell::new(TreeNode{ val: 20, left: None, right: None })));
-/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: node2 })));
+/// let node2 = TreeNode::new(20, None, None);
+/// let node1 = TreeNode::new(3, None, node2);
 ///
 /// assert_eq!(2, max_depth_bst(node1));
 ///
@@ -221,7 +219,7 @@ pub fn max_depth_bst(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
 /// ```
 /// use std::ops::DerefMut;
 ///
-/// use dfs::{num_islands};
+/// use algorithms::dfs::{num_islands};
 ///
 /// let mut grid = vec![
 ///     vec!['1', '1', '1', '1', '0'],

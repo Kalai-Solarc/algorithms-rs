@@ -1,5 +1,5 @@
 [package]
-name = "dfs"
+name = "algorithms"
 version = "0.1.0"
 authors = ["Kalaimani Balu <kalaimani.balu@gmail.com>"]
 edition = "2018"
