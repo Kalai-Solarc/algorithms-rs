@@ -126,3 +126,45 @@ pub fn is_valid_bst(root: Node) -> bool {
 
     dfs(root.clone(), None, None)
 }
+///
+/// ```
+/// use dfs::{TreeNode, is_symmetric};
+/// use std::rc::Rc;
+/// use std::cell::RefCell;
+///
+/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
+/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 4, left: None, right: None })));
+/// let node2_l = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node3, right: node4 })));
+/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
+/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 4, left: None, right: None })));
+/// let node2_r = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node3, right: node4 })));
+/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 1, left: node2_l, right: node2_r })));
+///
+/// assert_eq!(false, is_symmetric(node1));
+///
+/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
+/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 4, left: None, right: None })));
+/// let node2_l = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node3, right: node4 })));
+/// let node3 = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: None, right: None })));
+/// let node4 = Some(Rc::new(RefCell::new(TreeNode{ val: 4, left: None, right: None })));
+/// let node2_r = Some(Rc::new(RefCell::new(TreeNode{ val: 3, left: node4, right: node3 })));
+/// let node1 = Some(Rc::new(RefCell::new(TreeNode{ val: 1, left: node2_l, right: node2_r })));
+///
+/// assert_eq!(true, is_symmetric(node1));
+/// ```
+/// 
+pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+    fn dfs(node1: Node, node2: Node) -> bool {
+        match (node1, node2) {
+            (None, None) => true,
+            (Some(_), None) | (None, Some(_)) => false,
+            (Some(node1), Some(node2)) => {
+                node1.borrow().val == node2.borrow().val
+                    && dfs(node1.borrow().left.clone(), node2.borrow().right.clone())
+                    && dfs(node1.borrow().right.clone(), node2.borrow().left.clone())
+            }
+        }
+    }
+
+    dfs(root.clone(), root.clone())
+}
