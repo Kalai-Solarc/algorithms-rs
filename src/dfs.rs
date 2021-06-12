@@ -1,5 +1,7 @@
 use std::rc::Rc;
 use std::cell::RefCell;
+use std::ops::Deref;
+use std::collections::HashMap;
 
 
 /// (1) LETTER COMBINATIONS
@@ -333,4 +335,51 @@ pub fn flatten_binary_tree(root: &mut Node) {
     }
 
     dfs(root.clone(), None);
+}
+
+/// (7) BUILD TREE FROM PREORDER & INORDER
+///
+/// ```
+/// use algorithms::dfs::{TreeNode, build_tree};
+///
+/// let tree = build_tree(vec![3,9,20,15,7], vec![9,3,15,20,7]);
+///
+/// let node9 = TreeNode::new(9, None, None);
+/// let node15 = TreeNode::new(15, None, None);
+/// let node7 = TreeNode::new(7, None, None);
+/// let node20 = TreeNode::new(20, node15, node7);
+/// let root = TreeNode::new(3, node9, node20);
+///
+/// assert_eq!(root, tree);
+///
+/// ```
+pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> Node {
+
+    fn dfs(start: i32, end: i32, preorder: &[i32], map: &HashMap<i32, usize>, current: &mut usize) -> Node {
+        if start > end {
+            return None;
+        }
+
+        let val = preorder[*current];
+
+        *current += 1;
+
+        let i = map[&val] as i32;
+
+        let node = TreeNode{
+            val,
+            left: dfs(start, i - 1, preorder, map, current),
+            right: dfs(i + 1, end, preorder, map, current),
+        };
+
+        Some(Rc::new(RefCell::new(node)))
+    }
+
+    let mut map = HashMap::with_capacity(inorder.len());
+
+    for i in 0..inorder.len() {
+        map.insert(inorder[i],i);
+    }
+
+    dfs(0, preorder.len() as i32 - 1, preorder.deref(), &map, &mut 0)
 }
