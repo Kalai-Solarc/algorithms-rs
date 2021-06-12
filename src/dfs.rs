@@ -361,15 +361,13 @@ pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> Node {
         }
 
         let val = preorder[*current];
-
+        let mid = map[&val] as i32;
         *current += 1;
-
-        let i = map[&val] as i32;
 
         let node = TreeNode{
             val,
-            left: dfs(start, i - 1, preorder, map, current),
-            right: dfs(i + 1, end, preorder, map, current),
+            left: dfs(start, mid - 1, preorder, map, current),
+            right: dfs(mid + 1, end, preorder, map, current),
         };
 
         Some(Rc::new(RefCell::new(node)))
