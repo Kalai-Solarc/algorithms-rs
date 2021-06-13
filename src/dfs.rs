@@ -5,6 +5,8 @@ use std::collections::HashMap;
 use std::iter::FromIterator;
 
 
+use crate::model::{TreeNode, TreeNodeRef};
+
 /// (1) LETTER COMBINATIONS
 ///
 /// Given a string containing digits from 2-9 inclusive, return all possible letter combinations
@@ -53,24 +55,6 @@ pub fn letter_combinations(digits: &str) -> Vec<String> {
     results
 }
 
-
-#[derive(Debug, PartialEq, Eq)]
-pub struct TreeNode {
-  pub val: i32,
-  pub left: Node,
-  pub right: Node,
-}
-
-type Node = Option<Rc<RefCell<TreeNode>>>;
-
-impl TreeNode {
-  #[inline]
-  pub fn new(val: i32, left: Node, right: Node) -> Node {
-    Some(Rc::new(RefCell::new(TreeNode { val, left, right })))
-  }
-}
-
-
 /// (2) VALID BINARY TREE
 ///
 /// Given the root of a binary tree, determine if it is a valid binary search tree (BST).
@@ -84,7 +68,8 @@ impl TreeNode {
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
 ///
-/// use algorithms::dfs::{TreeNode, is_valid_bst};
+/// use algorithms::dfs::is_valid_bst;
+/// use algorithms::model::TreeNode;
 ///
 /// let node1 = TreeNode::new(1, None, None);
 /// let node3 = TreeNode::new(3, None, None);
@@ -101,8 +86,8 @@ impl TreeNode {
 /// assert_eq!(false, is_valid_bst(node5));
 /// ```
 ///
-pub fn is_valid_bst(root: Node) -> bool {
-    fn dfs(node: Node, lower: Node, upper: Node) -> bool {
+pub fn is_valid_bst(root: TreeNodeRef) -> bool {
+    fn dfs(node: TreeNodeRef, lower: TreeNodeRef, upper: TreeNodeRef) -> bool {
         match node.clone() {
             Some(n) => {
                 if let Some(lower) = lower.clone() {
@@ -132,7 +117,8 @@ pub fn is_valid_bst(root: Node) -> bool {
 /// Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
 ///
 /// ```
-/// use algorithms:: dfs::{TreeNode, is_symmetric};
+/// use algorithms::dfs::is_symmetric;
+/// use algorithms::model::TreeNode;
 ///
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
@@ -159,7 +145,7 @@ pub fn is_valid_bst(root: Node) -> bool {
 /// ```
 ///
 pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-    fn dfs(node1: Node, node2: Node) -> bool {
+    fn dfs(node1: TreeNodeRef, node2: TreeNodeRef) -> bool {
         match (node1, node2) {
             (None, None) => true,
             (Some(_), None) | (None, Some(_)) => false,
@@ -184,7 +170,8 @@ pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
 ///
-/// use algorithms::dfs::{max_depth_bst, TreeNode};
+/// use algorithms::dfs::max_depth_bst;
+/// use algorithms::model::TreeNode;
 ///
 /// let node9 = TreeNode::new(9, None, None);
 /// let node15 = TreeNode::new(15, None, None);
@@ -222,7 +209,7 @@ pub fn max_depth_bst(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
 /// ```
 /// use std::ops::DerefMut;
 ///
-/// use algorithms::dfs::{num_islands};
+/// use algorithms::dfs::num_islands;
 ///
 /// let mut grid = vec![
 ///     vec!['1', '1', '1', '1', '0'],
@@ -300,7 +287,8 @@ pub fn num_islands(grid: &mut [&mut [char]]) -> i32 {
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
 /// 
-/// use algorithms::dfs::{flatten_binary_tree, TreeNode};
+/// use algorithms::dfs::flatten_binary_tree;
+/// use algorithms::model::TreeNode;
 /// 
 /// let node3 = TreeNode::new(3, None, None);
 /// let node4 = TreeNode::new(4, None, None);
@@ -322,8 +310,8 @@ pub fn num_islands(grid: &mut [&mut [char]]) -> i32 {
 /// assert_eq!(vec![1, 2, 3, 4, 5, 6], nodes);
 /// ```
 /// 
-pub fn flatten_binary_tree(root: &mut Node) {
-    fn dfs(node: Node, rest: Node) -> Node {
+pub fn flatten_binary_tree(root: &mut TreeNodeRef) {
+    fn dfs(node: TreeNodeRef, rest: TreeNodeRef) -> TreeNodeRef {
         match node {
             None => rest,
             Some(node) => {
@@ -341,7 +329,8 @@ pub fn flatten_binary_tree(root: &mut Node) {
 /// (7) BUILD TREE FROM PREORDER & INORDER
 ///
 /// ```
-/// use algorithms::dfs::{TreeNode, build_tree};
+/// use algorithms::dfs::build_tree;
+/// use algorithms::model::TreeNode;
 ///
 /// let tree = build_tree(vec![3,9,20,15,7], vec![9,3,15,20,7]);
 ///
@@ -354,9 +343,9 @@ pub fn flatten_binary_tree(root: &mut Node) {
 /// assert_eq!(root, tree);
 ///
 /// ```
-pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> Node {
+pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> TreeNodeRef {
 
-    fn dfs(start: i32, end: i32, preorder: &[i32], map: &HashMap<i32, usize>, current: &mut usize) -> Node {
+    fn dfs(start: i32, end: i32, preorder: &[i32], map: &HashMap<i32, usize>, current: &mut usize) -> TreeNodeRef {
         if start > end {
             return None;
         }
