@@ -6,7 +6,7 @@ use crate::model::TreeNodeRef;
 ///
 /// ```
 /// use algorithms::model::TreeNode;
-/// use algorithms::bfs::right_side_view;
+/// use algorithms::breadth_first_search::right_side_view;
 ///
 /// let node5 = TreeNode::new(5, None, None);
 /// let node2 = TreeNode::new(2, None, node5);
@@ -53,7 +53,7 @@ pub fn right_side_view(root: TreeNodeRef) -> Vec<i32> {
 ///
 /// ```
 /// use algorithms::model::TreeNode;
-/// use algorithms::bfs::level_order;
+/// use algorithms::breadth_first_search::level_order;
 /// let node15 = TreeNode::new(15, None, None);
 /// let node7 = TreeNode::new(7, None, None);
 /// let node20 = TreeNode::new(20, node15, node7);

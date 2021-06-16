@@ -15,7 +15,7 @@ use crate::model::{TreeNode, TreeNodeRef};
 ///
 /// Examples:
 /// ```
-/// use algorithms::dfs::letter_combinations;
+/// use algorithms::depth_first_search::letter_combinations;
 ///
 /// assert_eq!(Vec::<String>::new(), letter_combinations(""));
 /// assert_eq!(vec!["a", "b", "c"], letter_combinations("2"));
@@ -67,7 +67,7 @@ pub fn letter_combinations(digits: &str) -> Vec<String> {
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
 ///
-/// use algorithms::dfs::is_valid_bst;
+/// use algorithms::depth_first_search::is_valid_bst;
 /// use algorithms::model::TreeNode;
 ///
 /// let node1 = TreeNode::new(1, None, None);
@@ -116,7 +116,7 @@ pub fn is_valid_bst(root: TreeNodeRef) -> bool {
 /// Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
 ///
 /// ```
-/// use algorithms::dfs::is_symmetric;
+/// use algorithms::depth_first_search::is_symmetric;
 /// use algorithms::model::TreeNode;
 ///
 /// use std::rc::Rc;
@@ -169,7 +169,7 @@ pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
 ///
-/// use algorithms::dfs::max_depth_bst;
+/// use algorithms::depth_first_search::max_depth_bst;
 /// use algorithms::model::TreeNode;
 ///
 /// let node9 = TreeNode::new(9, None, None);
@@ -208,7 +208,7 @@ pub fn max_depth_bst(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
 /// ```
 /// use std::ops::DerefMut;
 ///
-/// use algorithms::dfs::num_islands;
+/// use algorithms::depth_first_search::num_islands;
 ///
 /// let mut grid = vec![
 ///     vec!['1', '1', '1', '1', '0'],
@@ -286,7 +286,7 @@ pub fn num_islands(grid: &mut [&mut [char]]) -> i32 {
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
 /// 
-/// use algorithms::dfs::flatten_binary_tree;
+/// use algorithms::depth_first_search::flatten_binary_tree;
 /// use algorithms::model::TreeNode;
 /// 
 /// let node3 = TreeNode::new(3, None, None);
@@ -328,7 +328,7 @@ pub fn flatten_binary_tree(root: &mut TreeNodeRef) {
 /// (7) BUILD TREE FROM PREORDER & INORDER
 ///
 /// ```
-/// use algorithms::dfs::build_tree;
+/// use algorithms::depth_first_search::build_tree;
 /// use algorithms::model::TreeNode;
 ///
 /// let tree = build_tree(vec![3,9,20,15,7], vec![9,3,15,20,7]);
@@ -369,24 +369,4 @@ pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> TreeNodeRef {
     }
 
     dfs(0, preorder.len() as i32 - 1, preorder.deref(), &map, &mut 0)
-}
-
-
-pub fn find_target_sum_ways(nums: Vec<i32>, target: i32) -> i32 {
-    fn dfs(nums: &[i32], index: usize, temp: i32, target: i32, count: &mut i32) {
-        if nums.len() == index {
-            if temp == target {
-                *count += 1;
-            }
-
-            return;
-        }
-
-        dfs(nums, index + 1, temp + nums[index], target, count);
-        dfs(nums, index + 1, temp - nums[index], target, count);
-    }
-
-    let mut count = 0;
-    dfs(nums.deref(), 0, 0, target, &mut count);
-    count
 }
