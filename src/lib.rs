@@ -1,3 +1,4 @@
 pub mod model;
-pub mod dfs;
-pub mod bfs;
+pub mod depth_first_search;
+pub mod breadth_first_search;
+pub mod backtrack;
