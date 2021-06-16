@@ -370,3 +370,31 @@ pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> TreeNodeRef {
 
     dfs(0, preorder.len() as i32 - 1, preorder.deref(), &map, &mut 0)
 }
+
+/// (7) TARGET SUM WAYS
+///
+/// ```
+/// use algorithms::depth_first_search::find_target_sum_ways;
+///
+/// assert_eq!(5, find_target_sum_ways(vec![1, 1, 1, 1, 1], 3));
+///
+/// assert_eq!(1, find_target_sum_ways(vec![1], 1));
+/// ```
+pub fn find_target_sum_ways(nums: Vec<i32>, target: i32) -> i32 {
+    fn dfs(nums: &[i32], index: usize, temp: i32, target: i32, count: &mut i32) {
+        if nums.len() == index {
+            if temp == target {
+                *count += 1;
+            }
+
+            return;
+        }
+
+        dfs(nums, index + 1, temp + nums[index], target, count);
+        dfs(nums, index + 1, temp - nums[index], target, count);
+    }
+
+    let mut count = 0;
+    dfs(nums.deref(), 0, 0, target, &mut count);
+    count
+}
