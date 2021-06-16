@@ -439,3 +439,60 @@ pub fn max_path_sum(root: TreeNodeRef) -> i32 {
     dfs(root, &mut max);
     max
 }
+
+/// (9) COURSE SCHEDULE
+///
+/// ````
+/// use algorithms::depth_first_search::can_finish;
+///
+/// assert_eq!(true, can_finish(2, vec![vec![1, 0]]));
+///
+/// assert_eq!(false, can_finish(2, vec![vec![1, 0], vec![0, 1]]));
+/// ````
+pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
+    if num_courses == 0 || prerequisites.is_empty() {
+        return true;
+    }
+
+    let mut graph: HashMap<i32, Vec<i32>> = (0..num_courses).map(|i| (i, vec![])).collect();
+
+    for p in prerequisites {
+        graph.get_mut(&p[0]).unwrap().push(p[1]);
+    }
+
+    let mut visited = vec![0; num_courses as usize];
+
+    fn dfs(graph: &HashMap<i32, Vec<i32>>, visited: &mut [i32], i: i32) -> bool {
+        let index = i as usize;
+
+        if visited[index] == -1 {
+            return false;
+        }
+
+        if visited[index] == 1 {
+            return true;
+        }
+
+        visited[index] = -1;
+
+        if graph.contains_key(&i) {
+            for j in graph.get(&i).unwrap() {
+                if !dfs(graph, visited, *j) {
+                    return false;
+                }
+            }
+        }
+
+        visited[index] = 1;
+
+        true
+    }
+
+    for i in 0..num_courses {
+        if !dfs(&graph, &mut visited, i) {
+            return false;
+        }
+    }
+
+    true
+}
