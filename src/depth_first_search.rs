@@ -398,3 +398,44 @@ pub fn find_target_sum_ways(nums: Vec<i32>, target: i32) -> i32 {
     dfs(nums.deref(), 0, 0, target, &mut count);
     count
 }
+
+/// (8) BINARY TREE MAXIMUM PATH SUM
+///
+/// ```
+/// use algorithms::model::TreeNode;
+/// use algorithms::depth_first_search::max_path_sum;
+///
+/// let node2 = TreeNode::new(2, None, None);
+/// let node3 = TreeNode::new(3, None, None);
+/// let node1 = TreeNode::new(1, node2, node3);
+///
+/// assert_eq!(6, max_path_sum(node1));
+///
+/// let node9 = TreeNode::new(9, None, None);
+/// let node15 = TreeNode::new(15, None, None);
+/// let node7 = TreeNode::new(7, None, None);
+/// let node20 = TreeNode::new(20, node15, node7);
+/// let node10 = TreeNode::new(-10, node9, node20);
+///
+/// assert_eq!(42, max_path_sum(node10))
+/// ```
+pub fn max_path_sum(root: TreeNodeRef) -> i32 {
+    fn dfs(node: TreeNodeRef, max: &mut i32) -> i32 {
+        match node {
+            None => return 0,
+            Some(node) => {
+                let node = node.borrow();
+                let left = dfs(node.left.clone(), max);
+                let right = dfs(node.right.clone(), max);
+                let current = i32::max(left + node.val, right + node.val);
+                let current = i32::max(current, node.val);
+                *max = i32::max(*max, current);
+                *max = i32::max(*max, left + right + node.val);
+                current
+            }
+        }
+    }
+    let mut max = i32::MIN;
+    dfs(root, &mut max);
+    max
+}
