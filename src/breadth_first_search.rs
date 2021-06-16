@@ -39,7 +39,7 @@ pub fn right_side_view(root: TreeNodeRef) -> Vec<i32> {
                     queue.push_back(right)
                 }
 
-                 if let Some(left) = node.left.clone() {
+                if let Some(left) = node.left.clone() {
                     queue.push_back(left)
                 }
             }
@@ -74,7 +74,7 @@ pub fn level_order(root: TreeNodeRef) -> Vec<Vec<i32>> {
 
     while !queue.is_empty() {
         let mut values = vec![];
-        let mut nodes= vec![];
+        let mut nodes = vec![];
 
         for node in queue.pop_front().unwrap() {
             if let Some(node) = node {

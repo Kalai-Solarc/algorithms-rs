@@ -1,8 +1,7 @@
-use std::rc::Rc;
 use std::cell::RefCell;
-use std::ops::{Deref};
 use std::collections::HashMap;
-
+use std::ops::Deref;
+use std::rc::Rc;
 
 use crate::model::{TreeNode, TreeNodeRef};
 
@@ -26,10 +25,12 @@ pub fn letter_combinations(digits: &str) -> Vec<String> {
     let mut results = vec![];
 
     if digits.is_empty() {
-        return results
+        return results;
     }
 
-    let pad= ["", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"];
+    let pad = [
+        "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz",
+    ];
 
     let digits = digits.as_bytes();
 
@@ -91,13 +92,13 @@ pub fn is_valid_bst(root: TreeNodeRef) -> bool {
             Some(n) => {
                 if let Some(lower) = lower.clone() {
                     if !(lower.borrow().val < n.borrow().val) {
-                        return false
+                        return false;
                     }
                 }
 
                 if let Some(upper) = upper.clone() {
                     if !(upper.borrow().val > n.borrow().val) {
-                        return false
+                        return false;
                     }
                 }
 
@@ -105,7 +106,7 @@ pub fn is_valid_bst(root: TreeNodeRef) -> bool {
                     && dfs(n.borrow().right.clone(), node.clone(), upper)
             }
 
-            None => true
+            None => true,
         }
     }
 
@@ -192,9 +193,11 @@ pub fn max_depth_bst(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
     match root {
         None => 0,
         Some(node) => {
-            1 + i32::max(max_depth_bst(node.borrow().left.clone()),
-                         max_depth_bst(node.borrow().right.clone()))
-        },
+            1 + i32::max(
+                max_depth_bst(node.borrow().left.clone()),
+                max_depth_bst(node.borrow().right.clone()),
+            )
+        }
     }
 }
 
@@ -281,14 +284,14 @@ pub fn num_islands(grid: &mut [&mut [char]]) -> i32 {
 }
 
 /// (6) FLATTEN BINARY TREE
-/// 
+///
 /// ```
 /// use std::rc::Rc;
 /// use std::cell::RefCell;
-/// 
+///
 /// use algorithms::depth_first_search::flatten_binary_tree;
 /// use algorithms::model::TreeNode;
-/// 
+///
 /// let node3 = TreeNode::new(3, None, None);
 /// let node4 = TreeNode::new(4, None, None);
 /// let node6 = TreeNode::new(6, None, None);
@@ -308,7 +311,7 @@ pub fn num_islands(grid: &mut [&mut [char]]) -> i32 {
 ///
 /// assert_eq!(vec![1, 2, 3, 4, 5, 6], nodes);
 /// ```
-/// 
+///
 pub fn flatten_binary_tree(root: &mut TreeNodeRef) {
     fn dfs(node: TreeNodeRef, rest: TreeNodeRef) -> TreeNodeRef {
         match node {
@@ -343,8 +346,13 @@ pub fn flatten_binary_tree(root: &mut TreeNodeRef) {
 ///
 /// ```
 pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> TreeNodeRef {
-
-    fn dfs(start: i32, end: i32, preorder: &[i32], map: &HashMap<i32, usize>, current: &mut usize) -> TreeNodeRef {
+    fn dfs(
+        start: i32,
+        end: i32,
+        preorder: &[i32],
+        map: &HashMap<i32, usize>,
+        current: &mut usize,
+    ) -> TreeNodeRef {
         if start > end {
             return None;
         }
@@ -353,7 +361,7 @@ pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> TreeNodeRef {
         let mid = map[&val] as i32;
         *current += 1;
 
-        let node = TreeNode{
+        let node = TreeNode {
             val,
             left: dfs(start, mid - 1, preorder, map, current),
             right: dfs(mid + 1, end, preorder, map, current),
@@ -365,7 +373,7 @@ pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> TreeNodeRef {
     let mut map = HashMap::with_capacity(inorder.len());
 
     for i in 0..inorder.len() {
-        map.insert(inorder[i],i);
+        map.insert(inorder[i], i);
     }
 
     dfs(0, preorder.len() as i32 - 1, preorder.deref(), &map, &mut 0)

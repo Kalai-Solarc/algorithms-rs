@@ -32,11 +32,13 @@ pub fn solve_n_queens(n: usize) -> Vec<Vec<String>> {
         }
     }
 
-    fn validate(board: &mut Vec<Vec<char>>, row: usize, column: usize) -> bool{
+    fn validate(board: &mut Vec<Vec<char>>, row: usize, column: usize) -> bool {
         for i in 0..board.len() {
             for j in 0..column {
-                if board[i][j] == 'Q' && (row + j == column + i || row + column == i + j || row == i) {
-                    return false
+                if board[i][j] == 'Q'
+                    && (row + j == column + i || row + column == i + j || row == i)
+                {
+                    return false;
                 }
             }
         }
@@ -46,7 +48,10 @@ pub fn solve_n_queens(n: usize) -> Vec<Vec<String>> {
 
     #[inline]
     fn build(board: &mut Vec<Vec<char>>) -> Vec<String> {
-        board.iter().map(|row| String::from_iter(row.iter())).collect()
+        board
+            .iter()
+            .map(|row| String::from_iter(row.iter()))
+            .collect()
     }
 
     dfs(&mut board, 0, &mut result);
