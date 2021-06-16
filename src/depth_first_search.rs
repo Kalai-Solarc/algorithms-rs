@@ -504,3 +504,50 @@ pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
 
     true
 }
+
+/// (10) COURSE SCHEDULE II
+///
+/// ````
+/// use algorithms::depth_first_search::find_order;
+///
+/// assert_eq!(vec![0, 1], find_order(2, vec![vec![1, 0]]));
+///
+/// assert_eq!(vec![0, 1, 2, 3], find_order(4, vec![vec![1,0], vec![2,0], vec![3,1], vec![3,2]]));
+///
+/// assert_eq!(vec![0], find_order(1, vec![]));
+/// ````
+ pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
+    let mut result = vec![];
+    let mut visited = vec![0; num_courses as usize];
+    let mut graph: HashMap<usize, Vec<usize>> = (0..num_courses).map(|i| (i as usize, vec![])).collect();
+
+    for p in prerequisites {
+        graph.get_mut(&(p[0] as usize)).unwrap().push(p[1] as usize);
+    }
+
+    fn dfs(graph: &HashMap<usize, Vec<usize>>, visited: &mut Vec<i32>, result: &mut Vec<i32>, current: usize) -> bool {
+        visited[current] = -1;
+
+        for neighbour in graph[&current].iter() {
+            if visited[*neighbour] == -1 {
+                return false;
+            }
+
+            if visited[*neighbour] == 0 && !dfs(graph, visited, result, *neighbour) {
+                return false
+            }
+        }
+
+        visited[current] = 1;
+        result.push(current as i32);
+        true
+    }
+
+    for i in 0..num_courses as usize {
+        if visited[i] == 0 && !dfs(&graph, &mut visited, &mut result, i) {
+            return vec![];
+        }
+    }
+
+    result
+}
