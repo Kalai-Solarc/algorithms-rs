@@ -520,13 +520,19 @@ pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
 pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
     let mut result = vec![];
     let mut visited = vec![0; num_courses as usize];
-    let mut graph: HashMap<usize, Vec<usize>> = (0..num_courses).map(|i| (i as usize, vec![])).collect();
+    let mut graph: HashMap<usize, Vec<usize>> =
+        (0..num_courses).map(|i| (i as usize, vec![])).collect();
 
     for p in prerequisites {
         graph.get_mut(&(p[0] as usize)).unwrap().push(p[1] as usize);
     }
 
-    fn dfs(graph: &HashMap<usize, Vec<usize>>, visited: &mut Vec<i32>, result: &mut Vec<i32>, current: usize) -> bool {
+    fn dfs(
+        graph: &HashMap<usize, Vec<usize>>,
+        visited: &mut Vec<i32>,
+        result: &mut Vec<i32>,
+        current: usize,
+    ) -> bool {
         visited[current] = -1;
 
         for neighbour in graph[&current].iter() {
@@ -552,7 +558,6 @@ pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
 
     result
 }
-
 
 /// (11) HOUSE ROBBER III
 ///
@@ -585,7 +590,10 @@ pub fn rob(root: TreeNodeRef) -> i32 {
 
     fn dfs(node: TreeNodeRef) -> Choice {
         match node {
-            None => Choice { stolen: 0, not_stolen: 0 },
+            None => Choice {
+                stolen: 0,
+                not_stolen: 0,
+            },
             Some(node) => {
                 let node = node.borrow();
                 let left = dfs(node.left.clone());
@@ -626,13 +634,13 @@ pub fn decode_string(txt: &str) -> String {
                 '[' => {
                     buf.push_str(&dfs(chars, cur_count, index));
                     cur_count = 0;
-                },
+                }
                 ']' => {
                     return buf.repeat(count);
-                },
+                }
                 ch if ch.is_ascii_digit() => {
                     cur_count = cur_count * 10 + ch.to_digit(10).unwrap() as usize;
-                },
+                }
                 ch => buf.push(ch),
             }
         }
@@ -645,18 +653,18 @@ pub fn decode_string(txt: &str) -> String {
 }
 
 /// (13) BALANCED BINARY SEARCH TREE
-pub fn is_balanced_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+pub fn is_balanced_bt(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
     fn dfs(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         match root {
             Some(root) => {
                 let left = dfs(root.borrow().left.clone());
                 let right = dfs(root.borrow().right.clone());
-                if (left-right).abs() > 1 || left == -1 || right == -1 {
-                    return -1
+                if (left - right).abs() > 1 || left == -1 || right == -1 {
+                    return -1;
                 }
                 left.max(right) + 1
             }
-            None => 0
+            None => 0,
         }
     }
     dfs(root) != -1
@@ -665,10 +673,10 @@ pub fn is_balanced_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
 /// (14) SORTED ARRAY TO BST
 ///
 /// ```
-/// use algorithms::depth_first_search::{is_valid_bst, sorted_array_to_bst, is_balanced_bst};
+/// use algorithms::depth_first_search::{is_valid_bst, sorted_array_to_bst, is_balanced_bt};
 ///
 /// assert_eq!(true, is_valid_bst(sorted_array_to_bst(vec![1, 2, 3, 4, 5, 6, 7])));
-/// assert_eq!(true, is_balanced_bst(sorted_array_to_bst(vec![1, 2, 3, 4, 5, 6, 7])));
+/// assert_eq!(true, is_balanced_bt(sorted_array_to_bst(vec![1, 2, 3, 4, 5, 6, 7])));
 /// ```
 pub fn sorted_array_to_bst(nums: Vec<i32>) -> TreeNodeRef {
     fn dfs(nums: &Vec<i32>, start: usize, end: usize) -> TreeNodeRef {
@@ -677,7 +685,11 @@ pub fn sorted_array_to_bst(nums: Vec<i32>) -> TreeNodeRef {
         }
 
         let mid = start + (end - start) / 2;
-        let mut node = TreeNode { val: nums[mid], left: None, right: None };
+        let mut node = TreeNode {
+            val: nums[mid],
+            left: None,
+            right: None,
+        };
 
         if mid > 0 {
             node.left = dfs(nums, start, mid - 1);
