@@ -112,6 +112,7 @@ pub fn is_valid_bst(root: TreeNodeRef) -> bool {
 
     dfs(root.clone(), None, None)
 }
+
 /// (3) SYMETRIC TREE
 ///
 /// Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
@@ -516,7 +517,7 @@ pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
 ///
 /// assert_eq!(vec![0], find_order(1, vec![]));
 /// ````
- pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
+pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
     let mut result = vec![];
     let mut visited = vec![0; num_courses as usize];
     let mut graph: HashMap<usize, Vec<usize>> = (0..num_courses).map(|i| (i as usize, vec![])).collect();
@@ -534,7 +535,7 @@ pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
             }
 
             if visited[*neighbour] == 0 && !dfs(graph, visited, result, *neighbour) {
-                return false
+                return false;
             }
         }
 
@@ -550,4 +551,55 @@ pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
     }
 
     result
+}
+
+
+/// (11) HOUSE ROBBER III
+///
+/// ```
+/// use algorithms::depth_first_search::rob;
+/// use algorithms::model::TreeNode;
+///
+/// let node3 = TreeNode::new(3, None, None);
+/// let node1 = TreeNode::new(1, None, None);
+/// let node2 = TreeNode::new(2, None, node3);
+/// let node3 = TreeNode::new(3, None, node1);
+/// let node3 = TreeNode::new(3, node2, node3);
+///
+/// assert_eq!(7, rob(node3));
+///
+/// let node1 = TreeNode::new(1, None, None);
+/// let node3 = TreeNode::new(3, None, None);
+/// let node4 = TreeNode::new(4, node1, node3);
+/// let node1 = TreeNode::new(1, None, None);
+/// let node5 = TreeNode::new(5, None, node1);
+/// let node3 = TreeNode::new(3, node4, node5);
+///
+/// assert_eq!(9, rob(node3));
+/// ```
+pub fn rob(root: TreeNodeRef) -> i32 {
+    struct Choice {
+        stolen: i32,
+        not_stolen: i32,
+    }
+
+    fn dfs(node: TreeNodeRef) -> Choice {
+        match node {
+            None => Choice { stolen: 0, not_stolen: 0 },
+            Some(node) => {
+                let node = node.borrow();
+                let left = dfs(node.left.clone());
+                let right = dfs(node.right.clone());
+
+                Choice {
+                    stolen: node.val + left.not_stolen + right.not_stolen,
+                    not_stolen: i32::max(left.stolen, left.not_stolen)
+                        + i32::max(right.stolen, right.not_stolen),
+                }
+            }
+        }
+    }
+
+    let current = dfs(root);
+    i32::max(current.stolen, current.not_stolen)
 }
