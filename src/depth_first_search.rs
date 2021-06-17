@@ -643,3 +643,52 @@ pub fn decode_string(txt: &str) -> String {
     let chars: Vec<char> = txt.chars().collect();
     dfs(chars.deref(), 1, &mut 0)
 }
+
+/// (13) BALANCED BINARY SEARCH TREE
+pub fn is_balanced_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+    fn dfs(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        match root {
+            Some(root) => {
+                let left = dfs(root.borrow().left.clone());
+                let right = dfs(root.borrow().right.clone());
+                if (left-right).abs() > 1 || left == -1 || right == -1 {
+                    return -1
+                }
+                left.max(right) + 1
+            }
+            None => 0
+        }
+    }
+    dfs(root) != -1
+}
+
+/// (14) SORTED ARRAY TO BST
+///
+/// ```
+/// use algorithms::depth_first_search::{is_valid_bst, sorted_array_to_bst, is_balanced_bst};
+///
+/// assert_eq!(true, is_valid_bst(sorted_array_to_bst(vec![1, 2, 3, 4, 5, 6, 7])));
+/// assert_eq!(true, is_balanced_bst(sorted_array_to_bst(vec![1, 2, 3, 4, 5, 6, 7])));
+/// ```
+pub fn sorted_array_to_bst(nums: Vec<i32>) -> TreeNodeRef {
+    fn dfs(nums: &Vec<i32>, start: usize, end: usize) -> TreeNodeRef {
+        if start > end {
+            return None;
+        }
+
+        let mid = start + (end - start) / 2;
+        let mut node = TreeNode { val: nums[mid], left: None, right: None };
+
+        if mid > 0 {
+            node.left = dfs(nums, start, mid - 1);
+        }
+
+        if mid < end {
+            node.right = dfs(nums, mid + 1, end);
+        }
+
+        Some(Rc::new(RefCell::new(node)))
+    }
+
+    dfs(&nums, 0, nums.len() - 1)
+}
