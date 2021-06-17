@@ -603,3 +603,43 @@ pub fn rob(root: TreeNodeRef) -> i32 {
     let current = dfs(root);
     i32::max(current.stolen, current.not_stolen)
 }
+
+/// (12) DECODE STRING
+/// ```
+/// use algorithms::depth_first_search::decode_string;
+///
+/// assert_eq!("aaabcbc".to_string(), decode_string("3[a]2[bc]"));
+/// assert_eq!("accaccacc".to_string(), decode_string("3[a2[c]]"));
+/// assert_eq!("abcabccdcdcdef".to_string(), decode_string("2[abc]3[cd]ef"));
+/// assert_eq!("abccdcdcdxyz".to_string(), decode_string("abc3[cd]xyz"));
+/// ```
+pub fn decode_string(txt: &str) -> String {
+    fn dfs(chars: &[char], count: usize, index: &mut usize) -> String {
+        let mut buf = String::new();
+        let mut cur_count = 0;
+
+        while *index < chars.len() {
+            let ch = chars[*index];
+            *index += 1;
+
+            match ch {
+                '[' => {
+                    buf.push_str(&dfs(chars, cur_count, index));
+                    cur_count = 0;
+                },
+                ']' => {
+                    return buf.repeat(count);
+                },
+                ch if ch.is_ascii_digit() => {
+                    cur_count = cur_count * 10 + ch.to_digit(10).unwrap() as usize;
+                },
+                ch => buf.push(ch),
+            }
+        }
+
+        buf
+    }
+
+    let chars: Vec<char> = txt.chars().collect();
+    dfs(chars.deref(), 1, &mut 0)
+}
