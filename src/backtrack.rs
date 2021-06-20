@@ -215,3 +215,44 @@ pub fn combination_sum(candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
     dfs(&candidates, 0, &mut vec![], target, &mut result);
     result
 }
+
+/// PERMUTATIONS
+///
+/// ```
+/// use algorithms::backtrack::permute;
+///
+/// assert_eq!(
+///     vec![
+///         vec![1, 2, 3],
+///         vec![1, 3, 2],
+///         vec![2, 1, 3],
+///         vec![2, 3, 1],
+///         vec![3, 1, 2],
+///         vec![3, 2, 1]
+///     ],
+///     permute(vec![1, 2, 3])
+/// );
+/// ```
+pub fn permute(nums: Vec<i32>) -> Vec<Vec<i32>> {
+    fn dfs(nums: &[i32], index: usize, taken: &mut Vec<bool>, temp: &mut Vec<i32>, result: &mut Vec<Vec<i32>>) {
+        if index == nums.len() {
+            result.push(temp.to_owned());
+            return;
+        }
+
+        for (i, num) in nums.iter().enumerate() {
+            if !taken[i] {
+                taken[i] = true;
+                temp.push(*num);
+                dfs(nums, index + 1, taken, temp, result);
+                temp.pop();
+                taken[i] = false;
+            }
+        }
+    }
+
+    let mut result = vec![];
+    let mut taken = vec![false; nums.len()];
+    dfs(&nums, 0, &mut taken, &mut vec![], &mut result);
+    result
+}
