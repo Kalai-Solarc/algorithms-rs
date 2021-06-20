@@ -100,3 +100,34 @@ pub fn partition(st: String) -> Vec<Vec<String>> {
     dfs(0, &st, &mut vec![], &mut result);
     result
 }
+
+/// (3) GENERATE PARENTHESIS
+/// ```
+/// use algorithms::backtrack::generate_parenthesis;
+///
+/// assert_eq!(vec!["((()))", "(()())", "(())()", "()(())", "()()()"], generate_parenthesis(3));
+/// assert_eq!(vec!["()"], generate_parenthesis(1));
+/// ```
+pub fn generate_parenthesis(n: i32) -> Vec<String> {
+    fn dfs(open: i32, close: i32, str: &mut String, n: i32, result: &mut Vec<String>) {
+        if close > open || open > n {
+            return;
+        }
+
+        if open == close && open == n {
+            result.push(str.to_owned());
+        }
+
+        str.push_str("(");
+        dfs(open + 1, close, str, n, result);
+        str.pop();
+
+        str.push_str(")");
+        dfs(open, close + 1, str, n, result);
+        str.pop();
+    }
+
+    let mut result = vec![];
+    dfs(0, 0, &mut "".to_string(), n, &mut result);
+    result
+}
