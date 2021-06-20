@@ -1,4 +1,5 @@
 use std::iter::FromIterator;
+use std::ops::Deref;
 
 /// (1) N QUEENS
 ///
@@ -56,5 +57,47 @@ pub fn solve_n_queens(n: usize) -> Vec<Vec<String>> {
 
     dfs(&mut board, 0, &mut result);
 
+    result
+}
+
+/// (2) PALINDROME PARTITIONING
+/// ```
+/// use algorithms::backtrack::partition;
+///
+/// assert_eq!(vec![vec!["a","a","b"],vec!["aa","b"]], partition("aab".to_string()));
+/// assert_eq!(vec![vec!["a"]], partition("a".to_string()));
+/// ```
+pub fn partition(st: String) -> Vec<Vec<String>> {
+    fn dfs(index: usize, st: &str, path: &mut Vec<String>, result: &mut Vec<Vec<String>>) {
+        if index == st.len() {
+            result.push(path.clone());
+            return;
+        }
+
+        let chars: Vec<char> = st.chars().collect();
+
+        for i in index..st.len() {
+            if is_palindrome(chars.deref(), index, i) {
+                path.push(st[index..(i + 1)].to_string());
+                dfs(i + 1, st, path, result);
+                path.pop();
+
+            }
+        }
+    }
+
+    fn is_palindrome(chars: &[char], mut start: usize, mut end: usize) -> bool {
+        while start < end {
+            if chars[start] != chars[end] {
+                return false;
+            }
+            start += 1;
+            end -= 1;
+        }
+        true
+    }
+
+    let mut result = vec![];
+    dfs(0, &st, &mut vec![], &mut result);
     result
 }
