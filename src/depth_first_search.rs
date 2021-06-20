@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::ops::Deref;
 use std::rc::Rc;
 
-use crate::model::{TreeNode, TreeNodeRef};
+use crate::model::{TreeNode, TreeNodeRef, TreeNodeWithNextRef};
 
 /// (1) LETTER COMBINATIONS
 ///
@@ -703,4 +703,46 @@ pub fn sorted_array_to_bst(nums: Vec<i32>) -> TreeNodeRef {
     }
 
     dfs(&nums, 0, nums.len() - 1)
+}
+/// (15) POPULATING NEXT RIGHT POINTER IN EACH NODE
+/// ```
+/// use algorithms::model::TreeNodeWithNext;
+/// use algorithms::depth_first_search::connect_next_right;
+///
+/// let node4 = TreeNodeWithNext::new(4, None, None, None);
+/// let node5 = TreeNodeWithNext::new(5, None, None, None);
+/// let node6 = TreeNodeWithNext::new(6, None, None, None);
+/// let node7 = TreeNodeWithNext::new(7, None, None, None);
+/// let node2 = TreeNodeWithNext::new(2, node4.clone(), node5.clone(), None);
+/// let node3 = TreeNodeWithNext::new(3, node6.clone(), node7.clone(), None);
+/// let node1 = TreeNodeWithNext::new(1, node2.clone(), node3.clone(), None);
+///
+/// connect_next_right(node1.clone());
+///
+/// assert_eq!(None, node1.unwrap().borrow().next);
+/// assert_eq!(node3, node2.unwrap().borrow().next);
+/// assert_eq!(None, node3.unwrap().borrow().next);
+/// assert_eq!(node5, node4.unwrap().borrow().next);
+/// assert_eq!(node6, node5.unwrap().borrow().next);
+/// assert_eq!(node7, node6.unwrap().borrow().next);
+/// assert_eq!(None, node7.unwrap().borrow().next);
+/// ```
+pub fn connect_next_right(root: TreeNodeWithNextRef) -> TreeNodeWithNextRef {
+    fn dfs(node: TreeNodeWithNextRef, right: TreeNodeWithNextRef) {
+        match node {
+            None => return,
+            Some(node) => {
+                let mut node = node.borrow_mut();
+                node.next = right.clone();
+                dfs(node.left.clone(), node.right.clone());
+
+                match right {
+                    None => dfs(node.right.clone(), None),
+                    Some(right) => dfs(node.right.clone(), right.borrow().left.clone()),
+                }
+            }
+        }
+    }
+    dfs(root.clone(), None);
+    root
 }
