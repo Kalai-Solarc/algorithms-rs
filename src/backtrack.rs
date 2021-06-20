@@ -182,3 +182,36 @@ pub fn generate_parenthesis(n: i32) -> Vec<String> {
     dfs(0, 0, &mut "".to_string(), n, &mut result);
     result
 }
+
+/// COMBINATION SUM I
+///
+/// ```
+/// use algorithms::backtrack::combination_sum;
+///
+/// assert_eq!(vec![vec![2, 2, 3], vec![7]], combination_sum(vec![2, 3, 6, 7], 7));
+/// assert_eq!(vec![vec![2, 2, 2, 2], vec![2, 3, 3],vec![3, 5]], combination_sum(vec![2, 3, 5], 8));
+/// ```
+pub fn combination_sum(candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
+    fn dfs(candidates: &[i32], index: usize, temp: &mut Vec<i32>, target: i32, result: &mut Vec<Vec<i32>>) {
+        let sum: i32 = temp.iter().sum();
+
+        if sum > target {
+            return;
+        }
+
+        if sum == target {
+            result.push(temp.to_owned());
+            return;
+        }
+
+        for i in index..candidates.len() {
+            temp.push(candidates[i]);
+            dfs(candidates, i, temp, target, result);
+            temp.pop();
+        }
+    }
+
+    let mut result = vec![];
+    dfs(&candidates, 0, &mut vec![], target, &mut result);
+    result
+}
