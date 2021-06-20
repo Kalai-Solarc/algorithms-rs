@@ -33,8 +33,13 @@ impl TreeNodeWithNext {
         val: i32,
         left: TreeNodeWithNextRef,
         right: TreeNodeWithNextRef,
-        next: TreeNodeWithNextRef
+        next: TreeNodeWithNextRef,
     ) -> TreeNodeWithNextRef {
-        Some(Rc::new(RefCell::new(TreeNodeWithNext { val, left, right, next })))
+        Some(Rc::new(RefCell::new(TreeNodeWithNext {
+            val,
+            left,
+            right,
+            next,
+        })))
     }
 }

@@ -81,7 +81,6 @@ pub fn partition(st: String) -> Vec<Vec<String>> {
                 path.push(st[index..(i + 1)].to_string());
                 dfs(i + 1, st, path, result);
                 path.pop();
-
             }
         }
     }
