@@ -746,3 +746,97 @@ pub fn connect_next_right(root: TreeNodeWithNextRef) -> TreeNodeWithNextRef {
     dfs(root.clone(), None);
     root
 }
+
+/// (16) SURROUNDED REGIONS
+///
+/// ```
+/// use algorithms::depth_first_search::capture_surrounded_regions;
+///
+/// let mut matrix = vec![
+///     vec!['X', 'X', 'X', 'X'],
+///     vec!['X', 'O', 'O', 'X'],
+///     vec!['X', 'X', 'O', 'X'],
+///     vec!['X', 'O', 'X', 'X'],
+/// ];
+///
+/// capture_surrounded_regions(&mut matrix);
+///
+/// assert_eq!(
+///     vec![
+///         vec!['X', 'X', 'X', 'X'],
+///         vec!['X', 'X', 'X', 'X'],
+///         vec!['X', 'X', 'X', 'X'],
+///         vec!['X', 'O', 'X', 'X']
+///     ],
+///     matrix
+/// )
+/// ```
+pub fn capture_surrounded_regions(board: &mut Vec<Vec<char>>) {
+    fn dfs(board: &mut Vec<Vec<char>>, row: usize, column: usize) {
+        if board[row][column] != 'O' {
+            return;
+        }
+
+        board[row][column] = '*';
+
+        if row < board.len() - 1 {
+            dfs(board, row + 1, column);
+        }
+
+        if row > 0 {
+            dfs(board, row - 1, column);
+        }
+
+        if column < board[0].len() - 1 {
+            dfs(board, row, column + 1);
+        }
+
+        if column > 0 {
+            dfs(board, row, column - 1);
+        }
+    }
+
+    let rows = board.len();
+
+    if rows < 3 {
+        return;
+    }
+
+    let columns = board[0].len();
+
+    if columns < 3 {
+        return;
+    }
+
+    for row in 0..rows {
+        if board[row][0] == 'O' {
+            dfs(board, row, 0);
+        }
+
+        if board[row][columns - 1] == 'O' {
+            dfs(board, row, columns - 1);
+        }
+    }
+
+    for column in 0..columns {
+        if board[0][column] == 'O' {
+            dfs(board, 0, column);
+        }
+
+        if board[rows - 1][column] == 'O' {
+            dfs(board, rows - 1, column);
+        }
+    }
+
+    for i in 0..rows {
+        for j in 0..columns {
+            if board[i][j] == 'O' {
+                board[i][j] = 'X';
+            }
+
+            if board[i][j] == '*' {
+                board[i][j] = 'O';
+            }
+        }
+    }
+}
