@@ -256,3 +256,33 @@ pub fn permute(nums: Vec<i32>) -> Vec<Vec<i32>> {
     dfs(&nums, 0, &mut taken, &mut vec![], &mut result);
     result
 }
+
+/// SUBSETS
+///
+/// ```
+/// use algorithms::backtrack::subsets;
+///
+/// assert_eq!(
+///     vec![vec![], vec![3], vec![2], vec![2, 3], vec![1],vec! [1, 3],vec![1, 2], vec![1, 2, 3]],
+///     subsets(vec![1, 2, 3])
+/// );
+///
+/// assert_eq!(vec![vec![], vec![0]], subsets(vec![0]));
+/// ```
+pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
+    fn dfs(nums: &[i32], index: usize, temp: &mut Vec<i32>, result: &mut Vec<Vec<i32>>) {
+        if index == nums.len() {
+            result.push(temp.to_owned());
+            return;
+        }
+
+        dfs(nums, index + 1, temp, result);
+        temp.push(nums[index]);
+        dfs(nums, index + 1, temp, result);
+        temp.pop();
+    }
+
+    let mut result = vec![];
+    dfs(&nums, 0, &mut vec![], &mut result);
+    result
+}
