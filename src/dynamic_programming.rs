@@ -1,4 +1,4 @@
-/// (1) LONGEST INCREASING PATH IN A MATRIX
+/// LONGEST INCREASING PATH IN A MATRIX
 ///
 /// ```
 /// use algorithms::dynamic_programming::longest_increasing_path;

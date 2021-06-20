@@ -5,7 +5,7 @@ use std::rc::Rc;
 
 use crate::model::{TreeNode, TreeNodeRef, TreeNodeWithNextRef};
 
-/// (1) LETTER COMBINATIONS
+/// LETTER COMBINATIONS
 ///
 /// Given a string containing digits from 2-9 inclusive, return all possible letter combinations
 /// that the number could represent. Return the answer in any order.
@@ -55,7 +55,7 @@ pub fn letter_combinations(digits: &str) -> Vec<String> {
     results
 }
 
-/// (2) VALID BINARY TREE
+/// VALID BINARY TREE
 ///
 /// Given the root of a binary tree, determine if it is a valid binary search tree (BST).
 ///
@@ -113,7 +113,7 @@ pub fn is_valid_bst(root: TreeNodeRef) -> bool {
     dfs(root.clone(), None, None)
 }
 
-/// (3) SYMETRIC TREE
+/// SYMETRIC TREE
 ///
 /// Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
 ///
@@ -161,7 +161,7 @@ pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
     dfs(root.clone(), root.clone())
 }
 
-/// (4) MAX DEPTH OF BINARY SEARCH TREE
+/// MAX DEPTH OF BINARY SEARCH TREE
 ///
 /// Given the root of a binary tree, return its maximum depth.
 ///
@@ -202,7 +202,7 @@ pub fn max_depth_bst(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
     }
 }
 
-/// (5) NUMBER OF ISLANDS
+/// NUMBER OF ISLANDS
 ///
 /// Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
 ///
@@ -284,7 +284,7 @@ pub fn num_islands(grid: &mut [&mut [char]]) -> i32 {
     count as i32
 }
 
-/// (6) FLATTEN BINARY TREE
+/// FLATTEN BINARY TREE
 ///
 /// ```
 /// use std::rc::Rc;
@@ -329,7 +329,7 @@ pub fn flatten_binary_tree(root: &mut TreeNodeRef) {
     dfs(root.clone(), None);
 }
 
-/// (7) BUILD TREE FROM PREORDER & INORDER
+/// BUILD TREE FROM PREORDER & INORDER
 ///
 /// ```
 /// use algorithms::depth_first_search::build_tree;
@@ -380,7 +380,7 @@ pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> TreeNodeRef {
     dfs(0, preorder.len() as i32 - 1, preorder.deref(), &map, &mut 0)
 }
 
-/// (7) TARGET SUM WAYS
+/// TARGET SUM WAYS
 ///
 /// ```
 /// use algorithms::depth_first_search::find_target_sum_ways;
@@ -408,7 +408,7 @@ pub fn find_target_sum_ways(nums: Vec<i32>, target: i32) -> i32 {
     count
 }
 
-/// (8) BINARY TREE MAXIMUM PATH SUM
+/// BINARY TREE MAXIMUM PATH SUM
 ///
 /// ```
 /// use algorithms::model::TreeNode;
@@ -449,7 +449,7 @@ pub fn max_path_sum(root: TreeNodeRef) -> i32 {
     max
 }
 
-/// (9) COURSE SCHEDULE
+/// COURSE SCHEDULE
 ///
 /// ````
 /// use algorithms::depth_first_search::can_finish;
@@ -506,7 +506,7 @@ pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
     true
 }
 
-/// (10) COURSE SCHEDULE II
+/// COURSE SCHEDULE II
 ///
 /// ````
 /// use algorithms::depth_first_search::find_order;
@@ -559,7 +559,7 @@ pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
     result
 }
 
-/// (11) HOUSE ROBBER III
+/// HOUSE ROBBER III
 ///
 /// ```
 /// use algorithms::depth_first_search::rob;
@@ -612,7 +612,7 @@ pub fn rob(root: TreeNodeRef) -> i32 {
     i32::max(current.stolen, current.not_stolen)
 }
 
-/// (12) DECODE STRING
+/// DECODE STRING
 /// ```
 /// use algorithms::depth_first_search::decode_string;
 ///
@@ -652,7 +652,7 @@ pub fn decode_string(txt: &str) -> String {
     dfs(chars.deref(), 1, &mut 0)
 }
 
-/// (13) BALANCED BINARY SEARCH TREE
+/// BALANCED BINARY SEARCH TREE
 pub fn is_balanced_bt(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
     fn dfs(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         match root {
@@ -670,7 +670,7 @@ pub fn is_balanced_bt(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
     dfs(root) != -1
 }
 
-/// (14) SORTED ARRAY TO BST
+/// SORTED ARRAY TO BST
 ///
 /// ```
 /// use algorithms::depth_first_search::{is_valid_bst, sorted_array_to_bst, is_balanced_bt};
@@ -704,7 +704,7 @@ pub fn sorted_array_to_bst(nums: Vec<i32>) -> TreeNodeRef {
 
     dfs(&nums, 0, nums.len() - 1)
 }
-/// (15) POPULATING NEXT RIGHT POINTER IN EACH NODE
+/// POPULATING NEXT RIGHT POINTER IN EACH NODE
 /// ```
 /// use algorithms::model::TreeNodeWithNext;
 /// use algorithms::depth_first_search::connect_next_right;
@@ -747,7 +747,7 @@ pub fn connect_next_right(root: TreeNodeWithNextRef) -> TreeNodeWithNextRef {
     root
 }
 
-/// (16) SURROUNDED REGIONS
+/// SURROUNDED REGIONS
 ///
 /// ```
 /// use algorithms::depth_first_search::capture_surrounded_regions;

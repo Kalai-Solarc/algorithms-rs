@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use crate::model::TreeNodeRef;
 
-/// (1) BINARY TREE RIGHT SIDE VIEW
+/// BINARY TREE RIGHT SIDE VIEW
 ///
 /// ```
 /// use algorithms::model::TreeNode;
@@ -49,7 +49,7 @@ pub fn right_side_view(root: TreeNodeRef) -> Vec<i32> {
     result
 }
 
-/// (2) BINARY TREE LEVEL ORDER TRAVERSAL
+/// BINARY TREE LEVEL ORDER TRAVERSAL
 ///
 /// ```
 /// use algorithms::model::TreeNode;

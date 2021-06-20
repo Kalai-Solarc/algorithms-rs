@@ -1,7 +1,7 @@
 use std::iter::FromIterator;
 use std::ops::Deref;
 
-/// (1) N QUEENS
+/// N QUEENS
 ///
 /// ```
 /// use algorithms::backtrack::solve_n_queens;
@@ -60,7 +60,7 @@ pub fn solve_n_queens(n: usize) -> Vec<Vec<String>> {
     result
 }
 
-/// (2) PALINDROME PARTITIONING
+/// PALINDROME PARTITIONING
 /// ```
 /// use algorithms::backtrack::partition;
 ///
