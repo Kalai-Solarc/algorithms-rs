@@ -1,5 +1,7 @@
+use std::borrow::Borrow;
 use std::rc::Rc;
 use std::cell::RefCell;
+use std::ops::Deref;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
@@ -59,4 +61,28 @@ pub fn search_bst(root: MaybeTreeNodeRef, val: i32) -> MaybeTreeNodeRef {
     }
 
     None
+}
+
+
+pub fn inorder_traversal(root: MaybeTreeNodeRef) -> Vec<i32> {
+    let mut result = vec![];
+    let mut stack = vec![(root, false)];
+
+    while !stack.is_empty() {
+        let (maybe_node_ref, visited) = stack.pop().unwrap();
+
+        if let Some(node_ref) = maybe_node_ref.as_deref() {
+            let node_ref = node_ref.borrow();
+
+            if visited {
+                result.push(node_ref.val)
+            } else {
+                stack.push((node_ref.right.clone(), false));
+                stack.push((maybe_node_ref.clone(), true));
+                stack.push((node_ref.left.clone(), false));
+            }
+        }
+    }
+
+    result
 }
