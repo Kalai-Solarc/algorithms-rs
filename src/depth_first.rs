@@ -86,3 +86,30 @@ pub fn inorder_traversal(root: MaybeTreeNodeRef) -> Vec<i32> {
 
     result
 }
+
+pub fn is_valid_bst(root: MaybeTreeNodeRef) -> bool {
+    let mut max = None;
+    let mut stack = vec![(root, false)];
+
+    while !stack.is_empty() {
+        let (maybe_node_ref, visited) = stack.pop().unwrap();
+
+        if let Some(node_ref) = maybe_node_ref.as_deref() {
+            let node_ref = node_ref.borrow();
+
+            if visited {
+                if max.is_none() || max < Some(node_ref.val) {
+                    max = Some(node_ref.val);
+                } else {
+                    return false;
+                }
+            } else {
+                stack.push((node_ref.right.clone(), false));
+                stack.push((maybe_node_ref.clone(), true));
+                stack.push((node_ref.left.clone(), false));
+            }
+        }
+    }
+
+    true
+}
